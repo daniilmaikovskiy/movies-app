@@ -3,11 +3,14 @@ export default class MoviesService {
 
   url = 'https://api.themoviedb.org/3';
 
+  urlImageDB = 'https://image.tmdb.org/t/p/w500/';
+
   getMovies(query) {
     if ((typeof query === 'string' || query instanceof String) && query.length > 0) {
       fetch(new URL(`${this.url}/search/movie?api_key=${this.apiKey}&query=${query}`))
         .then((responce) => responce.json())
-        .then((json) => console.log(json));
+        .then((json) => json.results)
+        .then((results) => console.log(results[0]));
     }
   }
 }
