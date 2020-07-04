@@ -1,23 +1,14 @@
 import React from 'react';
 import 'normalize.css';
 import './app.css';
-import MoviesService from '../../services/movies-service';
-import MovieBlock from '../movie-block';
+import 'antd/dist/antd.css';
+import MoviePage from '../movie-page';
 
 export default class App extends React.PureComponent {
-  moviesService = new MoviesService();
-
-  onClick = () => {
-    this.moviesService.getMovies('return');
-  };
-
   render() {
     return (
       <div>
-        <MovieBlock />
-        <button type="button" onClick={this.onClick}>
-          Get Movies
-        </button>
+        <MoviePage />
       </div>
     );
   }
