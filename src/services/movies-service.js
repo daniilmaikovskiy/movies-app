@@ -18,7 +18,7 @@ export default class MoviesService {
               overview: el.overview,
               date: el.release_date,
               img: this.urlImageDB + el.poster_path,
-              vote: el.vote_average,
+              vote: `${el.vote_average}`,
             };
 
             return movieData;

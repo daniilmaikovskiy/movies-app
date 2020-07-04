@@ -63,7 +63,7 @@ export default function MovieBlock({ data }) {
 }
 
 MovieBlock.propTypes = {
-  data: PropTypes.objectOf({
+  data: PropTypes.shape({
     title: PropTypes.string.isRequired,
     overview: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
