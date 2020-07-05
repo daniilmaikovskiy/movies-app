@@ -1,13 +1,14 @@
 .movie-block {
+  position: relative;
   flex-shrink: 0;
-  margin: 8px;
+  margin: 5px;
   padding: 5px;
   padding-left: 10px;
   display: flex;
   flex-direction: column;
   min-height: 220px;
   width: 360px;
-  box-shadow: 0 0 4px 0 #aaa;
+  box-shadow: 0 3px 6px 0 #aaa;
 }
 
 .movie-block .col-1 {
@@ -16,8 +17,9 @@
 }
 
 .img-wrapper {
+  min-width: 60px;
   width: 60px;
-  height: 90px;
+  min-height: 90px;
 }
 
 .movie-block .col-1 img {
@@ -27,10 +29,11 @@
 
 .main-info-wrapper {
   padding-left: 10px;
+  padding-right: 35px;
 }
 
 .title {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 24px;
 }
 
@@ -38,6 +41,20 @@
   font-size: 12px;
   line-height: 22px;
   color: #827e7e;
+}
+
+.vote {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #0f0;
+  border-radius: 50%;
+  font-size: 12px;
 }
 
 .movie-block .col-2 {
@@ -51,6 +68,7 @@
 }
 
 .movie-block .col-3 {
+  display: flex;
+  justify-content: flex-end;
   min-height: 40px;
-  background-color: rgb(251, 255, 0);
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './movie-block.css';
 import { formatWithOptions } from 'date-fns/fp';
 import { enUS } from 'date-fns/locale';
-import { Tag } from 'antd';
+import { Tag, Rate } from 'antd';
 
 function formatDate(date) {
   const dateObj = new Date(date);
@@ -38,8 +38,28 @@ function cutOverview(txt) {
   return cutedTxt + (txt.length !== cutedTxt.length ? '...' : '');
 }
 
+function calculateBorderColor(vote) {
+  const MAX_VOTE = 10;
+  const MAX_SATURATE = 255;
+
+  const ratio = vote / MAX_VOTE;
+
+  let green = MAX_SATURATE;
+  let red = 0;
+
+  if (ratio < 0.7) {
+    red = MAX_SATURATE;
+  }
+
+  if (ratio <= 0.35) {
+    green = 0;
+  }
+
+  return `rgb(${red}, ${green}, 0)`;
+}
+
 export default function MovieBlock({ data }) {
-  const { img, title, date, overview } = data;
+  const { img, title, date, overview, vote } = data;
 
   return (
     <div className="movie-block">
@@ -53,11 +73,16 @@ export default function MovieBlock({ data }) {
           <Tag>Action</Tag>
           <Tag>Drama</Tag>
         </div>
+        <div className="vote" style={{ borderColor: calculateBorderColor(vote) }}>
+          {vote}
+        </div>
       </div>
       <div className="col-2">
         <span className="overview">{cutOverview(overview)}</span>
       </div>
-      <div className="col-3" />
+      <div className="col-3">
+        <Rate allowHalf count={10} defaultValue={5} />
+      </div>
     </div>
   );
 }
