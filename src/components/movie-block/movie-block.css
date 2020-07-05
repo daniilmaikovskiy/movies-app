@@ -107,6 +107,7 @@
   .movie-poster__img-wrapper {
     display: block;
     width: 200px;
+    min-height: 300px;
   }
 
   .movie-poster img {
