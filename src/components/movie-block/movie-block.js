@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './movie-block.css';
 import { formatWithOptions } from 'date-fns/fp';
 import { enUS } from 'date-fns/locale';
-import { Tag, Rate } from 'antd';
+import { Tag, Rate, Empty } from 'antd';
 import { StarFilled } from '@ant-design/icons';
 
 function formatDate(date) {
@@ -79,16 +79,26 @@ Vote.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
+function MoviePoster({ img }) {
+  const image = img === '' ? <Empty /> : <img src={img} alt="" />;
+
+  return (
+    <div className="movie-poster">
+      <div className="movie-poster__img-wrapper">{image}</div>
+    </div>
+  );
+}
+
+MoviePoster.propTypes = {
+  img: PropTypes.string.isRequired,
+};
+
 export default function MovieBlock({ data }) {
   const { img, title, date, overview, vote } = data;
 
   return (
     <div className="movie-block">
-      <div className="movie-poster">
-        <div className="movie-poster__img-wrapper">
-          <img src={img} alt="" />
-        </div>
-      </div>
+      <MoviePoster img={img} />
       <div className="movie-description">
         <div className="col-1">
           <div className="description-img-wrapper">

@@ -69,6 +69,7 @@ export default class MoviePage extends React.Component {
 
     return (
       <div className="movie-page">
+        <div className="switch">switch</div>
         <input
           type="search"
           className="movie-search"

@@ -9,10 +9,6 @@
   box-shadow: 0 3px 6px 0 #aaa;
 }
 
-.movie-block:last-child:nth-child(2n + 1) {
-  margin-right: auto;
-}
-
 .movie-block .col-1 {
   display: flex;
 }
@@ -105,7 +101,9 @@
   }
 
   .movie-poster__img-wrapper {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 200px;
     min-height: 300px;
   }
