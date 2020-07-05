@@ -4,6 +4,7 @@ import './movie-block.css';
 import { formatWithOptions } from 'date-fns/fp';
 import { enUS } from 'date-fns/locale';
 import { Tag, Rate } from 'antd';
+import { StarFilled } from '@ant-design/icons';
 
 function formatDate(date) {
   const dateObj = new Date(date);
@@ -63,25 +64,39 @@ export default function MovieBlock({ data }) {
 
   return (
     <div className="movie-block">
-      <div className="col-1">
-        <div className="img-wrapper">
+      <div className="movie-poster">
+        <div className="movie-poster__img-wrapper">
           <img src={img} alt="" />
         </div>
-        <div className="main-info-wrapper">
-          <div className="title">{title}</div>
-          <div className="date">{formatDate(date)}</div>
-          <Tag>Action</Tag>
-          <Tag>Drama</Tag>
-        </div>
-        <div className="vote" style={{ borderColor: calculateBorderColor(vote) }}>
-          {vote}
-        </div>
       </div>
-      <div className="col-2">
-        <span className="overview">{cutOverview(overview)}</span>
-      </div>
-      <div className="col-3">
-        <Rate allowHalf count={10} defaultValue={5} />
+      <div className="movie-description">
+        <div className="col-1">
+          <div className="description-img-wrapper">
+            <img src={img} alt="" />
+          </div>
+          <div className="main-info-wrapper">
+            <div className="title">{title}</div>
+            <div className="date">{formatDate(date)}</div>
+            <div className="tags">
+              <Tag>Action</Tag>
+              <Tag>Drama</Tag>
+            </div>
+          </div>
+          <div className="vote" style={{ borderColor: calculateBorderColor(vote) }}>
+            {vote}
+          </div>
+        </div>
+        <div className="col-2">
+          <span className="overview">{cutOverview(overview)}</span>
+        </div>
+        <div className="col-3">
+          <Rate
+            allowHalf
+            count={10}
+            defaultValue={5}
+            character={<StarFilled style={{ fontSize: '16px' }} />}
+          />
+        </div>
       </div>
     </div>
   );

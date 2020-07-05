@@ -4,3 +4,11 @@
   align-items: center;
   width: 100%;
 }
+
+@media (min-width: 768px) {
+  .movie-page {
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}
