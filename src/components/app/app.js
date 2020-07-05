@@ -7,7 +7,7 @@ import MoviePage from '../movie-page';
 export default class App extends React.PureComponent {
   render() {
     return (
-      <div>
+      <div className="main-wrapper">
         <MoviePage />
       </div>
     );
