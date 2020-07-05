@@ -1,6 +1,6 @@
 import React from 'react';
 import './movie-page.css';
-import { Pagination } from 'antd';
+import { Pagination, Menu, Empty } from 'antd';
 import MovieBlock from '../movie-block';
 import MoviesService from '../../services/movies-service';
 
@@ -16,6 +16,7 @@ export default class MoviePage extends React.Component {
     movieBlocksData: [],
     totalPages: 0,
     query: '',
+    switchKeys: ['search'],
   };
 
   constructor() {
@@ -41,6 +42,10 @@ export default class MoviePage extends React.Component {
     this.moviesService.getMovies(query);
   };
 
+  onClickMenu = (evt) => {
+    this.setState({ switchKeys: [evt.key] });
+  };
+
   MoviePagination = ({ total, onChange }) => {
     if (total === 0) {
       return null;
@@ -53,23 +58,33 @@ export default class MoviePage extends React.Component {
         total={total}
         showSizeChanger={false}
         onChange={onChange}
+        className="movie-pagination"
       />
     );
   };
 
   render() {
-    const { movieBlocksData, totalPages, query } = this.state;
-    const { onChangePage, onChangeQuery, MoviePagination } = this;
+    const { movieBlocksData, totalPages, query, switchKeys } = this.state;
+    const { onChangePage, onChangeQuery, MoviePagination, onClickMenu } = this;
 
-    const movieBlocks = movieBlocksData.map((el) => {
-      const { id, ...movieData } = el;
+    const movieBlocks = movieBlocksData.length ? (
+      movieBlocksData.map((el) => {
+        const { id, ...movieData } = el;
 
-      return <MovieBlock key={id} data={movieData} />;
-    });
+        return <MovieBlock key={id} data={movieData} />;
+      })
+    ) : (
+      <Empty style={{ marginTop: '100px', marginBottom: '100px' }} />
+    );
 
     return (
       <div className="movie-page">
-        <div className="switch">switch</div>
+        <div className="switch">
+          <Menu onClick={onClickMenu} selectedKeys={switchKeys} mode="horizontal">
+            <Menu.Item key="search">Search</Menu.Item>
+            <Menu.Item key="rated">Rated</Menu.Item>
+          </Menu>
+        </div>
         <input
           type="search"
           className="movie-search"
