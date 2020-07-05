@@ -1,31 +1,32 @@
 import React from 'react';
 import './movie-page.css';
-import { Pagination, Menu, Empty } from 'antd';
+import { Pagination, Menu, Empty, Spin } from 'antd';
 import MovieBlock from '../movie-block';
 import MoviesService from '../../services/movies-service';
 
 export default class MoviePage extends React.Component {
-  moviesService = new MoviesService((newData, newTotalPages) => {
-    this.setState({
-      movieBlocksData: newData,
-      totalPages: newTotalPages,
-    });
-  });
+  moviesService = new MoviesService(
+    (newData, newTotalPages) => {
+      this.setState({
+        movieBlocksData: newData,
+        totalPages: newTotalPages,
+        loading: false,
+      });
+    },
+    () => {
+      this.setState({
+        loading: true,
+      });
+    }
+  );
 
   state = {
     movieBlocksData: [],
     totalPages: 0,
     query: '',
     switchKeys: ['search'],
+    loading: false,
   };
-
-  constructor() {
-    super();
-
-    const { query } = this.state;
-
-    this.moviesService.getMovies(query);
-  }
 
   onChangePage = (page) => {
     const { query } = this.state;
@@ -63,19 +64,31 @@ export default class MoviePage extends React.Component {
     );
   };
 
+  getMovies = () => {
+    const { movieBlocksData, loading } = this.state;
+
+    if (loading) {
+      return <Spin tip="loading..." style={{ marginTop: '100px', marginBottom: '100px' }} />;
+    }
+
+    const isEmpty = !movieBlocksData.length;
+
+    if (isEmpty) {
+      return <Empty style={{ marginTop: '100px', marginBottom: '100px' }} />;
+    }
+
+    const movieBlocks = movieBlocksData.map((el) => {
+      const { id, ...movieData } = el;
+
+      return <MovieBlock key={id} data={movieData} />;
+    });
+
+    return movieBlocks;
+  };
+
   render() {
-    const { movieBlocksData, totalPages, query, switchKeys } = this.state;
-    const { onChangePage, onChangeQuery, MoviePagination, onClickMenu } = this;
-
-    const movieBlocks = movieBlocksData.length ? (
-      movieBlocksData.map((el) => {
-        const { id, ...movieData } = el;
-
-        return <MovieBlock key={id} data={movieData} />;
-      })
-    ) : (
-      <Empty style={{ marginTop: '100px', marginBottom: '100px' }} />
-    );
+    const { totalPages, query, switchKeys } = this.state;
+    const { onChangePage, onChangeQuery, MoviePagination, onClickMenu, getMovies } = this;
 
     return (
       <div className="movie-page">
@@ -92,7 +105,7 @@ export default class MoviePage extends React.Component {
           onChange={onChangeQuery}
           value={query}
         />
-        <div className="movies">{movieBlocks}</div>
+        <div className="movies">{getMovies()}</div>
         <MoviePagination total={totalPages} onChange={onChangePage} />
       </div>
     );
