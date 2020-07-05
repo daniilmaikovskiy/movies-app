@@ -63,6 +63,22 @@ function calculateBorderColor(vote) {
   return `rgb(${red}, ${green}, 0)`;
 }
 
+function Vote({ value }) {
+  if (value === '' || value === '0') {
+    return null;
+  }
+
+  return (
+    <div className="vote" style={{ borderColor: calculateBorderColor(value) }}>
+      {value}
+    </div>
+  );
+}
+
+Vote.propTypes = {
+  value: PropTypes.string.isRequired,
+};
+
 export default function MovieBlock({ data }) {
   const { img, title, date, overview, vote } = data;
 
@@ -86,9 +102,7 @@ export default function MovieBlock({ data }) {
               <Tag>Drama</Tag>
             </div>
           </div>
-          <div className="vote" style={{ borderColor: calculateBorderColor(vote) }}>
-            {vote}
-          </div>
+          <Vote value={vote} />
         </div>
         <div className="col-2">
           <span className="overview">{cutOverview(overview)}</span>
@@ -98,7 +112,7 @@ export default function MovieBlock({ data }) {
             allowHalf
             count={10}
             defaultValue={5}
-            character={<StarFilled style={{ fontSize: '16px' }} />}
+            character={<StarFilled style={{ fontSize: '14px' }} />}
           />
         </div>
       </div>
