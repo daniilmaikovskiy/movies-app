@@ -7,10 +7,16 @@
   background-color: #fff;
 }
 
+.movies {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
 @media (min-width: 768px) {
-  .movie-page {
+  .movies {
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     flex-wrap: wrap;
   }
 }

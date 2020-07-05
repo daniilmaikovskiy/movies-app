@@ -7,10 +7,14 @@ import { Tag, Rate } from 'antd';
 import { StarFilled } from '@ant-design/icons';
 
 function formatDate(date) {
-  const dateObj = new Date(date);
-  const dateToString = formatWithOptions({ locale: enUS }, 'MMMM d, yyyy');
+  try {
+    const dateObj = new Date(date);
+    const dateToString = formatWithOptions({ locale: enUS }, 'MMMM d, yyyy');
 
-  return dateToString(dateObj);
+    return dateToString(dateObj);
+  } catch {
+    return date;
+  }
 }
 
 function isLetterOrDigit(symbol) {

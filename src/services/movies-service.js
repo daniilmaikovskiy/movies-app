@@ -5,26 +5,31 @@ export default class MoviesService {
 
   urlImageDB = 'https://image.tmdb.org/t/p/w500';
 
-  getMovies(query, updateDataFn) {
+  createURL(query, page) {
+    return `${this.url}/search/movie?api_key=${this.apiKey}&query=${query}&page=${page}`;
+  }
+
+  getMovies(query, updateDataFn, page = 1) {
     if ((typeof query === 'string' || query instanceof String) && query.length > 0) {
-      fetch(new URL(`${this.url}/search/movie?api_key=${this.apiKey}&query=${query}`))
+      fetch(this.createURL(query, page))
         .then((responce) => responce.json())
-        .then((json) => json.results)
-        .then((results) => {
+        .then(({ results, total_pages: totalPages }) => {
           const moviesData = results.map((el) => {
+            const img = el.poster_path == null ? '' : this.urlImageDB + el.poster_path;
+
             const movieData = {
               id: el.id,
               title: el.title,
               overview: el.overview,
               date: el.release_date,
-              img: this.urlImageDB + el.poster_path,
+              img,
               vote: `${el.vote_average}`,
             };
 
             return movieData;
           });
 
-          updateDataFn(moviesData);
+          updateDataFn(moviesData, totalPages);
         });
     }
   }

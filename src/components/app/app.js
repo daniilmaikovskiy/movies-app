@@ -7,7 +7,7 @@ import MoviePage from '../movie-page';
 export default class App extends React.PureComponent {
   render() {
     return (
-      <div className="main-wrapper">
+      <div className="main-wrapper" style={{ minHeight: window.screen.height }}>
         <MoviePage />
       </div>
     );

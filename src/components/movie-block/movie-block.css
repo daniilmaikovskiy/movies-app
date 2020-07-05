@@ -9,6 +9,10 @@
   box-shadow: 0 3px 6px 0 #aaa;
 }
 
+.movie-block:last-child:nth-child(2n + 1) {
+  margin-right: auto;
+}
+
 .movie-block .col-1 {
   display: flex;
 }

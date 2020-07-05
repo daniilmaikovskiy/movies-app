@@ -1,5 +1,6 @@
 import React from 'react';
 import './movie-page.css';
+import { Pagination } from 'antd';
 import MovieBlock from '../movie-block';
 import MoviesService from '../../services/movies-service';
 
@@ -8,20 +9,36 @@ export default class MoviePage extends React.Component {
 
   state = {
     movieBlocksData: [],
+    totalPages: 0,
+    query: 'return',
   };
 
   constructor() {
     super();
 
-    this.moviesService.getMovies('return', this.updateData);
+    const { query } = this.state;
+
+    this.moviesService.getMovies(query, this.updateData);
   }
 
-  updateData = (newData) => {
-    this.setState({ movieBlocksData: newData });
+  onChange = (page) => {
+    const { query } = this.state;
+
+    if (page > 0) {
+      this.moviesService.getMovies(query, this.updateData, page);
+    }
+  };
+
+  updateData = (newData, newTotalPages) => {
+    this.setState({
+      movieBlocksData: newData,
+      totalPages: newTotalPages,
+    });
   };
 
   render() {
-    const { movieBlocksData } = this.state;
+    const { movieBlocksData, totalPages } = this.state;
+    const { onChange } = this;
 
     const movieBlocks = movieBlocksData.map((el) => {
       const { id, ...movieData } = el;
@@ -29,6 +46,17 @@ export default class MoviePage extends React.Component {
       return <MovieBlock key={id} data={movieData} />;
     });
 
-    return <div className="movie-page">{movieBlocks}</div>;
+    return (
+      <div className="movie-page">
+        <div className="movies">{movieBlocks}</div>
+        <Pagination
+          size="small"
+          pageSize="1"
+          total={totalPages}
+          showSizeChanger={false}
+          onChange={onChange}
+        />
+      </div>
+    );
   }
 }
