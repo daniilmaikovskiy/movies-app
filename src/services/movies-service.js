@@ -7,6 +7,8 @@ export default class MoviesService {
 
   timerId = null;
 
+  delay = 300;
+
   debounce = (fn, debounceTime) => {
     return function (...args) {
       clearTimeout(this.timerId);
@@ -17,19 +19,21 @@ export default class MoviesService {
     };
   };
 
-  constructor(fnGet, fnLoading) {
+  constructor(fnGet, fnLoading, fnError) {
     this.fnGet = fnGet;
     this.fnLoading = fnLoading;
+    this.fnError = fnError;
   }
 
-  createURL(query, page) {
+  createSearchMoviesURL(query, page) {
+    const searchUrl = `${this.url}/search/movie?api_key=${this.apiKey}`;
     const encodedQuery = encodeURIComponent(query);
 
-    return `${this.url}/search/movie?api_key=${this.apiKey}&query=${encodedQuery}&page=${page}`;
+    return `${searchUrl}&query=${encodedQuery}&page=${page}`;
   }
 
   debouncedGetMoviesFn = this.debounce((query, page) => {
-    fetch(this.createURL(query, page))
+    fetch(this.createSearchMoviesURL(query, page))
       .then((responce) => responce.json())
       .then(({ results, total_pages: totalPages }) => {
         const moviesData = results.map((el) => {
@@ -48,8 +52,9 @@ export default class MoviesService {
         });
 
         this.fnGet(moviesData, totalPages);
-      });
-  }, 1000);
+      })
+      .catch(() => this.fnError());
+  }, this.delay);
 
   getMovies(query, page = 1) {
     if ((typeof query === 'string' || query instanceof String) && query.length > 0) {

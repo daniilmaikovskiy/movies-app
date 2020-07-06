@@ -1,6 +1,6 @@
 import React from 'react';
 import './movie-page.css';
-import { Pagination, Menu, Empty, Spin } from 'antd';
+import { Pagination, Menu, Empty, Spin, Alert } from 'antd';
 import MovieBlock from '../movie-block';
 import MoviesService from '../../services/movies-service';
 
@@ -17,6 +17,11 @@ export default class MoviePage extends React.Component {
       this.setState({
         loading: true,
       });
+    },
+    () => {
+      this.setState({
+        error: true,
+      });
     }
   );
 
@@ -26,6 +31,7 @@ export default class MoviePage extends React.Component {
     query: '',
     switchKeys: ['search'],
     loading: false,
+    error: false,
   };
 
   onChangePage = (page) => {
@@ -65,16 +71,28 @@ export default class MoviePage extends React.Component {
   };
 
   getMovies = () => {
-    const { movieBlocksData, loading } = this.state;
+    const { movieBlocksData, loading, error } = this.state;
+
+    if (error) {
+      return (
+        <Alert
+          style={{ marginTop: '50px', marginBottom: '100px' }}
+          message="Error"
+          description="This is a fetch error."
+          type="error"
+          showIcon
+        />
+      );
+    }
 
     if (loading) {
-      return <Spin tip="loading..." style={{ marginTop: '100px', marginBottom: '100px' }} />;
+      return <Spin tip="loading..." style={{ marginTop: '60px', marginBottom: '100px' }} />;
     }
 
     const isEmpty = !movieBlocksData.length;
 
     if (isEmpty) {
-      return <Empty style={{ marginTop: '100px', marginBottom: '100px' }} />;
+      return <Empty style={{ marginTop: '60px', marginBottom: '100px' }} />;
     }
 
     const movieBlocks = movieBlocksData.map((el) => {
