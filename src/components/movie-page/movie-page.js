@@ -18,9 +18,10 @@ export default class MoviePage extends React.Component {
         loading: true,
       });
     },
-    () => {
+    (error) => {
       this.setState({
         error: true,
+        errorMessage: error,
       });
     }
   );
@@ -32,6 +33,7 @@ export default class MoviePage extends React.Component {
     switchKeys: ['search'],
     loading: false,
     error: false,
+    errorMessage: '',
   };
 
   onChangePage = (page) => {
@@ -71,14 +73,16 @@ export default class MoviePage extends React.Component {
   };
 
   getMovies = () => {
-    const { movieBlocksData, loading, error } = this.state;
+    const { movieBlocksData, loading, error, errorMessage } = this.state;
 
     if (error) {
+      const text = errorMessage === 'Failed to fetch' ? 'No internet connection' : 'Server error';
+
       return (
         <Alert
           style={{ marginTop: '50px', marginBottom: '100px' }}
-          message="Error"
-          description="This is a fetch error."
+          message="Error:"
+          description={text}
           type="error"
           showIcon
         />

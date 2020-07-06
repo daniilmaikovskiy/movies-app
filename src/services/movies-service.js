@@ -28,8 +28,9 @@ export default class MoviesService {
   createSearchMoviesURL(query, page) {
     const searchUrl = `${this.url}/search/movie?api_key=${this.apiKey}`;
     const encodedQuery = encodeURIComponent(query);
+    const url = `${searchUrl}&query=${encodedQuery}&page=${page}`;
 
-    return `${searchUrl}&query=${encodedQuery}&page=${page}`;
+    return url;
   }
 
   debouncedGetMoviesFn = this.debounce((query, page) => {
@@ -53,7 +54,7 @@ export default class MoviesService {
 
         this.fnGet(moviesData, totalPages);
       })
-      .catch(() => this.fnError());
+      .catch((error) => this.fnError(error.message));
   }, this.delay);
 
   getMovies(query, page = 1) {
