@@ -5,15 +5,15 @@ export default class MoviesService {
 
   urlImageDB = 'https://image.tmdb.org/t/p/w500';
 
-  createSearchMoviesURL(query, page) {
+  createSearchMoviesURL = (query, page) => {
     const searchUrl = `${this.url}/search/movie?api_key=${this.apiKey}`;
     const encodedQuery = encodeURIComponent(query);
     const url = `${searchUrl}&query=${encodedQuery}&page=${page}`;
 
     return url;
-  }
+  };
 
-  async getMovies(query, page = 1) {
+  getMovies = async (query, page = 1) => {
     if ((typeof query === 'string' || query instanceof String) && query.length > 0) {
       return fetch(this.createSearchMoviesURL(query, page))
         .then((responce) => responce.json())
@@ -37,5 +37,5 @@ export default class MoviesService {
         });
     }
     return { movieBlocksData: [], totalPages: 0 };
-  }
+  };
 }

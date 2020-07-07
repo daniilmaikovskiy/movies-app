@@ -1,13 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './movie-page.css';
 import { Pagination, Menu, Empty, Spin, Alert } from 'antd';
-import _ from 'lodash';
+import { debounce } from 'lodash';
 import MovieBlock from '../movie-block';
-import MoviesService from '../../services/movies-service';
 
 export default class MoviePage extends React.Component {
-  moviesService = new MoviesService();
-
   state = {
     movieBlocksData: [],
     totalPages: 0,
@@ -19,14 +17,14 @@ export default class MoviePage extends React.Component {
     errorMessage: '',
   };
 
-  debouncedGetMovies = _.debounce((prevState) => {
+  debouncedMoviesServiceGetMovies = debounce((prevState) => {
     const { query, page } = this.state;
+    const { getMovies } = this.props;
 
     if (prevState.query !== query || prevState.page !== page) {
       this.setState({ loading: true });
 
-      this.moviesService
-        .getMovies(query, page)
+      getMovies(query, page)
         .then(({ movieBlocksData, totalPages }) => {
           this.setState({
             movieBlocksData,
@@ -44,7 +42,7 @@ export default class MoviePage extends React.Component {
   }, 300);
 
   componentDidUpdate(prevProps, prevState) {
-    this.debouncedGetMovies(prevState);
+    this.debouncedMoviesServiceGetMovies(prevState);
   }
 
   onChangePage = (page) => {
@@ -141,3 +139,7 @@ export default class MoviePage extends React.Component {
     );
   }
 }
+
+MoviePage.propTypes = {
+  getMovies: PropTypes.func.isRequired,
+};
