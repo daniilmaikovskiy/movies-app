@@ -43,24 +43,18 @@ function cutOverview(txt) {
   return cutedTxt + (txt.length !== cutedTxt.length ? '...' : '');
 }
 
-function calculateBorderColor(vote) {
-  const MAX_VOTE = 10;
-  const MAX_SATURATE = 255;
-
-  const ratio = vote / MAX_VOTE;
-
-  let green = MAX_SATURATE;
-  let red = 0;
-
-  if (ratio < 0.7) {
-    red = MAX_SATURATE;
+function getBorderColorClass(vote) {
+  if (vote > 7) {
+    return 'vote-higher-7';
+  }
+  if (vote > 5) {
+    return 'vote-higher-5';
+  }
+  if (vote > 3) {
+    return 'vote-higher-3';
   }
 
-  if (ratio <= 0.35) {
-    green = 0;
-  }
-
-  return `rgb(${red}, ${green}, 0)`;
+  return 'vote-lower-3';
 }
 
 function Vote({ value }) {
@@ -68,11 +62,7 @@ function Vote({ value }) {
     return null;
   }
 
-  return (
-    <div className="vote" style={{ borderColor: calculateBorderColor(value) }}>
-      {value}
-    </div>
-  );
+  return <div className={`vote ${getBorderColorClass(value)}`}>{value}</div>;
 }
 
 Vote.propTypes = {
