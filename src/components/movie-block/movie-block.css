@@ -72,6 +72,26 @@
   display: none;
 }
 
+.vote-higher-7 {
+  border-color: #66e900;
+}
+
+.vote-higher-5 {
+  border-color: #e9d100;
+}
+
+.vote-higher-3 {
+  border-color: #e97e00;
+}
+
+.vote-lower-3 {
+  border-color: #e90000;
+}
+
+.star-filled {
+  font-size: 14px;
+}
+
 @media (min-width: 768px) {
   .movie-block {
     margin: 15px;
@@ -111,18 +131,5 @@
   .movie-poster img {
     max-width: 100%;
     height: auto;
-  }
-
-  .vote-higher-7 {
-    border-color: #66E900;
-  }
-  .vote-higher-5 {
-    border-color: #E9D100;
-  }
-  .vote-higher-3 {
-    border-color: #E97E00;
-  }
-  .vote-lower-3 {
-    border-color: #E90000;
   }
 }

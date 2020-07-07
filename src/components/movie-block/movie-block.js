@@ -111,8 +111,8 @@ export default function MovieBlock({ data }) {
           <Rate
             allowHalf
             count={10}
-            defaultValue={5}
-            character={<StarFilled style={{ fontSize: '14px' }} />}
+            defaultValue={0}
+            character={<StarFilled className="star-filled" />}
           />
         </div>
       </div>
