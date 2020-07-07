@@ -2,6 +2,7 @@ import React from 'react';
 import './movie-page.css';
 import { Menu } from 'antd';
 import MoviePageSearch from '../movie-page-search';
+import MoviePageRated from '../movie-page-rated';
 import { MoviesServiceConsumer } from '../movies-service-context';
 
 export default class MoviePage extends React.Component {
@@ -13,10 +14,16 @@ export default class MoviePage extends React.Component {
     this.setState({ switchKeys: [evt.key] });
   };
 
+  showHideSection = (component, name) => {
+    const { switchKeys } = this.state;
+    const isVisible = switchKeys.some((el) => el === name);
+
+    return isVisible ? component : null;
+  };
+
   render() {
     const { switchKeys } = this.state;
-    const { onClickMenu } = this;
-
+    const { onClickMenu, showHideSection } = this;
     return (
       <div className="movie-page">
         <div className="switch">
@@ -27,7 +34,12 @@ export default class MoviePage extends React.Component {
         </div>
         <MoviesServiceConsumer>
           {({ getMovies }) => {
-            return <MoviePageSearch getMovies={getMovies} />;
+            return (
+              <>
+                {showHideSection(<MoviePageSearch getMovies={getMovies} />, 'search')}
+                {showHideSection(<MoviePageRated />, 'rated')}
+              </>
+            );
           }}
         </MoviesServiceConsumer>
       </div>
