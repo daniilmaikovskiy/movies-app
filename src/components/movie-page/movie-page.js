@@ -14,16 +14,17 @@ export default class MoviePage extends React.Component {
     this.setState({ switchKeys: [evt.key] });
   };
 
-  showHideSection = (component, name) => {
+  getHideClassByName = (name) => {
     const { switchKeys } = this.state;
     const isVisible = switchKeys.some((el) => el === name);
 
-    return isVisible ? component : null;
+    return isVisible ? '' : 'hidden';
   };
 
   render() {
     const { switchKeys } = this.state;
-    const { onClickMenu, showHideSection } = this;
+    const { onClickMenu, getHideClassByName } = this;
+
     return (
       <div className="movie-page">
         <div className="switch">
@@ -36,8 +37,8 @@ export default class MoviePage extends React.Component {
           {({ getMovies }) => {
             return (
               <>
-                {showHideSection(<MoviePageSearch getMovies={getMovies} />, 'search')}
-                {showHideSection(<MoviePageRated />, 'rated')}
+                <MoviePageSearch className={getHideClassByName('search')} getMovies={getMovies} />
+                <MoviePageRated className={getHideClassByName('rated')} />
               </>
             );
           }}

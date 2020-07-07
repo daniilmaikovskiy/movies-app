@@ -13,7 +13,7 @@ export default class App extends React.PureComponent {
     return (
       <div className="main-wrapper">
         <MoviesServiceProvider value={this.moviesService}>
-          <MoviePage />;
+          <MoviePage />
         </MoviesServiceProvider>
       </div>
     );

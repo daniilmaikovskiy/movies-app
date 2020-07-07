@@ -96,9 +96,10 @@ export default class MoviePageSearch extends React.Component {
   render() {
     const { totalPages, query } = this.state;
     const { onChangeQuery, onChangePage, getMovies } = this;
+    const { className } = this.props;
 
     return (
-      <>
+      <div className={`movie-page-search ${className}`}>
         <input
           type="search"
           className="movie-search"
@@ -108,11 +109,12 @@ export default class MoviePageSearch extends React.Component {
         />
         <div className="movies">{getMovies()}</div>
         <PageController total={totalPages} onChange={onChangePage} />
-      </>
+      </div>
     );
   }
 }
 
 MoviePageSearch.propTypes = {
   getMovies: PropTypes.func.isRequired,
+  className: PropTypes.string.isRequired,
 };
