@@ -1,46 +1,55 @@
 import React from 'react';
 import './movie-page.css';
 import { Pagination, Menu, Empty, Spin, Alert } from 'antd';
+import _ from 'lodash';
 import MovieBlock from '../movie-block';
 import MoviesService from '../../services/movies-service';
 
 export default class MoviePage extends React.Component {
-  moviesService = new MoviesService(
-    (newData, newTotalPages) => {
-      this.setState({
-        movieBlocksData: newData,
-        totalPages: newTotalPages,
-        loading: false,
-      });
-    },
-    () => {
-      this.setState({
-        loading: true,
-      });
-    },
-    (error) => {
-      this.setState({
-        error: true,
-        errorMessage: error,
-      });
-    }
-  );
+  moviesService = new MoviesService();
 
   state = {
     movieBlocksData: [],
     totalPages: 0,
     query: '',
+    page: 1,
     switchKeys: ['search'],
     loading: false,
     error: false,
     errorMessage: '',
   };
 
-  onChangePage = (page) => {
-    const { query } = this.state;
+  debouncedGetMovies = _.debounce((prevState) => {
+    const { query, page } = this.state;
 
+    if (prevState.query !== query || prevState.page !== page) {
+      this.setState({ loading: true });
+
+      this.moviesService
+        .getMovies(query, page)
+        .then(({ movieBlocksData, totalPages }) => {
+          this.setState({
+            movieBlocksData,
+            totalPages,
+            loading: false,
+          });
+        })
+        .catch((error) => {
+          this.setState({
+            error: true,
+            errorMessage: error,
+          });
+        });
+    }
+  }, 300);
+
+  componentDidUpdate(prevProps, prevState) {
+    this.debouncedGetMovies(prevState);
+  }
+
+  onChangePage = (page) => {
     if (page > 0) {
-      this.moviesService.getMovies(query, page);
+      this.setState({ page });
     }
   };
 
@@ -48,7 +57,6 @@ export default class MoviePage extends React.Component {
     const query = target.value.trimLeft();
 
     this.setState({ query });
-    this.moviesService.getMovies(query);
   };
 
   onClickMenu = (evt) => {
