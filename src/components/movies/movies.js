@@ -46,9 +46,13 @@ export default function Movies({ movieBlocksData, loading, error, errorMessage, 
   return <div className="movies">{getMovies()}</div>;
 }
 
-// Movies.defaultProps = {
-
-// };
+Movies.defaultProps = {
+  movieBlocksData: [],
+  loading: false,
+  error: false,
+  errorMessage: '',
+  rateMovie: () => {},
+};
 
 Movies.propTypes = {
   movieBlocksData: PropTypes.arrayOf(
@@ -60,9 +64,9 @@ Movies.propTypes = {
       img: PropTypes.string.isRequired,
       vote: PropTypes.string.isRequired,
     })
-  ).isRequired,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.bool.isRequired,
-  errorMessage: PropTypes.string.isRequired,
-  rateMovie: PropTypes.func.isRequired,
+  ),
+  loading: PropTypes.bool,
+  error: PropTypes.bool,
+  errorMessage: PropTypes.string,
+  rateMovie: PropTypes.func,
 };
