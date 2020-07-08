@@ -21,6 +21,8 @@ export default class MoviePageSearch extends React.Component {
     const { query, page } = this.state;
     const { getMovies } = this.props;
 
+    console.log(page);
+
     if (prevState.query !== query || prevState.page !== page) {
       this.setState({ loading: true });
 
@@ -54,7 +56,7 @@ export default class MoviePageSearch extends React.Component {
   onChangeQuery = ({ target }) => {
     const query = target.value.trimLeft();
 
-    this.setState({ query });
+    this.setState({ query, page: 1 });
   };
 
   getMovies = () => {
@@ -94,7 +96,7 @@ export default class MoviePageSearch extends React.Component {
   };
 
   render() {
-    const { totalPages, query } = this.state;
+    const { totalPages, query, page } = this.state;
     const { onChangeQuery, onChangePage, getMovies } = this;
     const { className } = this.props;
 
@@ -108,7 +110,7 @@ export default class MoviePageSearch extends React.Component {
           value={query}
         />
         <div className="movies">{getMovies()}</div>
-        <PageController total={totalPages} onChange={onChangePage} />
+        <PageController total={totalPages} onChange={onChangePage} current={page} />
       </div>
     );
   }
