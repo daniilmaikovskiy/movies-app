@@ -34,10 +34,14 @@ export default class MoviePage extends React.Component {
           </Menu>
         </div>
         <MoviesServiceConsumer>
-          {({ getMovies }) => {
+          {({ getMovies, rateMovie }) => {
             return (
               <>
-                <MoviePageSearch className={getHideClassByName('search')} getMovies={getMovies} />
+                <MoviePageSearch
+                  className={getHideClassByName('search')}
+                  getMovies={getMovies}
+                  rateMovie={rateMovie}
+                />
                 <MoviePageRated className={getHideClassByName('rated')} />
               </>
             );

@@ -38,4 +38,24 @@ export default class MoviesService {
     }
     return { movieBlocksData: [], totalPages: 0 };
   };
+
+  createGuestSession = async () => {
+    return fetch(`${this.url}/authentication/guest_session/new?api_key=${this.apiKey}`)
+      .then((response) => response.json())
+      .then(({ guest_session_id: id }) => id);
+  };
+
+  rateMovie = async (guestSessionId, id, vote) => {
+    const rateUrl = `${this.url}/movie/${id}/rating?api_key=${this.apiKey}`;
+
+    fetch(`${rateUrl}&guest_session_id=${guestSessionId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify({
+        value: Number(vote),
+      }),
+    });
+  };
 }
