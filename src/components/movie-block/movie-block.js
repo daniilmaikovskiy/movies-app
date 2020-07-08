@@ -83,7 +83,7 @@ MoviePoster.propTypes = {
   img: PropTypes.string.isRequired,
 };
 
-export default function MovieBlock({ data }) {
+export default function MovieBlock({ data, rateMovie }) {
   const { img, title, date, overview, vote } = data;
 
   return (
@@ -113,6 +113,7 @@ export default function MovieBlock({ data }) {
             count={10}
             defaultValue={0}
             character={<StarFilled className="star-filled" />}
+            onChange={rateMovie}
           />
         </div>
       </div>
@@ -121,6 +122,7 @@ export default function MovieBlock({ data }) {
 }
 
 MovieBlock.propTypes = {
+  rateMovie: PropTypes.func.isRequired,
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
     overview: PropTypes.string.isRequired,

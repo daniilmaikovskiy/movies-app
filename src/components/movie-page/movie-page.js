@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './movie-page.css';
 import { Menu } from 'antd';
 import MoviePageSearch from '../movie-page-search';
@@ -22,6 +23,7 @@ export default class MoviePage extends React.Component {
   };
 
   render() {
+    const { guestSessionId } = this.props;
     const { switchKeys } = this.state;
     const { onClickMenu, getHideClassByName } = this;
 
@@ -40,7 +42,9 @@ export default class MoviePage extends React.Component {
                 <MoviePageSearch
                   className={getHideClassByName('search')}
                   getMovies={getMovies}
-                  rateMovie={rateMovie}
+                  rateMovie={(id, vote) => {
+                    rateMovie(guestSessionId, id, vote);
+                  }}
                 />
                 <MoviePageRated className={getHideClassByName('rated')} />
               </>
@@ -51,3 +55,7 @@ export default class MoviePage extends React.Component {
     );
   }
 }
+
+MoviePage.propTypes = {
+  guestSessionId: PropTypes.string.isRequired,
+};

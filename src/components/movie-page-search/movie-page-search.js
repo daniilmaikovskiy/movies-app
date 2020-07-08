@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './movie-page-search.css';
-import { Empty, Spin, Alert } from 'antd';
 import { debounce } from 'lodash';
-import MovieBlock from '../movie-block';
 import PageController from '../page-controller';
+import Movies from '../movies';
 
 export default class MoviePageSearch extends React.Component {
   state = {
@@ -20,8 +19,6 @@ export default class MoviePageSearch extends React.Component {
   debouncedMoviesServiceGetMovies = debounce((prevState) => {
     const { query, page } = this.state;
     const { getMovies } = this.props;
-
-    console.log(page);
 
     if (prevState.query !== query || prevState.page !== page) {
       this.setState({ loading: true });
@@ -59,46 +56,10 @@ export default class MoviePageSearch extends React.Component {
     this.setState({ query, page: 1 });
   };
 
-  getMovies = () => {
-    const { movieBlocksData, loading, error, errorMessage } = this.state;
-
-    if (error) {
-      const text = errorMessage === 'Failed to fetch' ? 'No internet connection' : 'Server error';
-
-      return (
-        <Alert
-          style={{ marginTop: '50px', marginBottom: '100px' }}
-          message="Error:"
-          description={text}
-          type="error"
-          showIcon
-        />
-      );
-    }
-
-    if (loading) {
-      return <Spin tip="loading..." style={{ marginTop: '60px', marginBottom: '100px' }} />;
-    }
-
-    const isEmpty = !movieBlocksData.length;
-
-    if (isEmpty) {
-      return <Empty style={{ marginTop: '60px', marginBottom: '100px' }} />;
-    }
-
-    const movieBlocks = movieBlocksData.map((el) => {
-      const { id, ...movieData } = el;
-
-      return <MovieBlock key={id} data={movieData} />;
-    });
-
-    return movieBlocks;
-  };
-
   render() {
-    const { totalPages, query, page } = this.state;
-    const { onChangeQuery, onChangePage, getMovies } = this;
-    const { className } = this.props;
+    const { totalPages, query, page, movieBlocksData, loading, error, errorMessage } = this.state;
+    const { onChangeQuery, onChangePage } = this;
+    const { className, rateMovie } = this.props;
 
     return (
       <div className={`movie-page-search ${className}`}>
@@ -109,7 +70,13 @@ export default class MoviePageSearch extends React.Component {
           onChange={onChangeQuery}
           value={query}
         />
-        <div className="movies">{getMovies()}</div>
+        <Movies
+          movieBlocksData={movieBlocksData}
+          loading={loading}
+          error={error}
+          errorMessage={errorMessage}
+          rateMovie={rateMovie}
+        />
         <PageController total={totalPages} onChange={onChangePage} current={page} />
       </div>
     );
@@ -118,5 +85,6 @@ export default class MoviePageSearch extends React.Component {
 
 MoviePageSearch.propTypes = {
   getMovies: PropTypes.func.isRequired,
+  rateMovie: PropTypes.func.isRequired,
   className: PropTypes.string.isRequired,
 };

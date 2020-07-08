@@ -7,26 +7,29 @@ import MoviePage from '../movie-page';
 import MoviesService from '../../services/movies-service';
 import { MoviesServiceProvider } from '../movies-service-context';
 
-export default class App extends React.PureComponent {
+export default class App extends React.Component {
   moviesService = new MoviesService();
 
   state = {
     loading: true,
+    guestSessionId: '',
   };
 
   componentDidMount() {
     this.moviesService.createGuestSession().then((id) => {
-      console.log(id);
-      this.setState({ loading: false });
+      this.setState({
+        loading: false,
+        guestSessionId: id,
+      });
     });
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, guestSessionId } = this.state;
     const content = (
       <div className="main-wrapper">
         <MoviesServiceProvider value={this.moviesService}>
-          <MoviePage />
+          <MoviePage guestSessionId={guestSessionId} />
         </MoviesServiceProvider>
       </div>
     );
