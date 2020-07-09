@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import './movie-page-selector.css';
 import MoviePageSearch from '../movie-page-search';
 import MoviePageRated from '../movie-page-rated';
-import MoviesService from '../../services/movies-service';
+import MoviesServiceContext from '../movies-service-context';
 
 export default function MoviePageSelector({ switchKeys, guestSessionId }) {
-  const { getMovies, rateMovie, getRatedMovies } = new MoviesService();
+  const { getMovies, rateMovie, getRatedMovies } = useContext(MoviesServiceContext);
 
   const getHideClassByName = (name) => {
     const isVisible = switchKeys.some((el) => el === name);

@@ -1,3 +1,5 @@
-import { MoviesServiceProvider, MoviesServiceConsumer } from './movies-service-context';
+import React from 'react';
 
-export { MoviesServiceProvider, MoviesServiceConsumer };
+const MoviesServiceContext = React.createContext();
+
+export default MoviesServiceContext;

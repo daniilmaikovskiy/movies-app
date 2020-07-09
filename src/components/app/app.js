@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import { Spin } from 'antd';
 import MoviePage from '../movie-page';
 import MoviesService from '../../services/movies-service';
-import { MoviesServiceProvider } from '../movies-service-context';
+import MoviesServiceContext from '../movies-service-context';
 import { GenreListProvider } from '../genre-list-context';
 import ErrorAlert from '../error-alert';
 
@@ -47,9 +47,9 @@ export default class App extends React.Component {
     const content = (
       <div className="main-wrapper">
         <GenreListProvider value={genreList}>
-          <MoviesServiceProvider value={this.moviesService}>
+          <MoviesServiceContext.Provider value={this.moviesService}>
             <MoviePage guestSessionId={guestSessionId} />
-          </MoviesServiceProvider>
+          </MoviesServiceContext.Provider>
         </GenreListProvider>
       </div>
     );
