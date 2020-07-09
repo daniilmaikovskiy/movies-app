@@ -38,7 +38,7 @@ export default class MoviePageSearch extends React.Component {
           });
         });
     }
-  }, 300);
+  }, 500);
 
   componentDidUpdate(prevProps, prevState) {
     this.debouncedMoviesServiceGetMovies(prevState);
