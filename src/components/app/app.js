@@ -2,11 +2,12 @@ import React from 'react';
 import 'normalize.css';
 import './app.css';
 import 'antd/dist/antd.css';
-import { Spin, Alert } from 'antd';
+import { Spin } from 'antd';
 import MoviePage from '../movie-page';
 import MoviesService from '../../services/movies-service';
 import { MoviesServiceProvider } from '../movies-service-context';
 import { GenreListProvider } from '../genre-list-context';
+import ErrorAlert from '../error-alert';
 
 export default class App extends React.Component {
   moviesService = new MoviesService();
@@ -40,6 +41,9 @@ export default class App extends React.Component {
 
   render() {
     const { loading, guestSessionId, error, errorMessage, genreList } = this.state;
+
+    if (error) return <ErrorAlert message={errorMessage} />;
+
     const content = (
       <div className="main-wrapper">
         <GenreListProvider value={genreList}>
@@ -54,17 +58,7 @@ export default class App extends React.Component {
         <Spin tip="loading..." />
       </div>
     );
-    const errorAlert = (
-      <Alert
-        style={{ marginTop: '50px', marginBottom: '100px' }}
-        message="Error:"
-        description={errorMessage}
-        type="error"
-        showIcon
-      />
-    );
-    const contentOrSpin = loading ? spin : content;
 
-    return error ? errorAlert : contentOrSpin;
+    return loading ? spin : content;
   }
 }
