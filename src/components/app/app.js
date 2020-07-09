@@ -11,13 +11,12 @@ import { GenreListProvider } from '../genre-list-context';
 export default class App extends React.Component {
   moviesService = new MoviesService();
 
-  genreList = null;
-
   state = {
     loading: true,
     guestSessionId: '',
     error: false,
     errorMessage: '',
+    genreList: null,
   };
 
   componentDidMount() {
@@ -25,23 +24,25 @@ export default class App extends React.Component {
       this.moviesService.createGuestSession().then((id) => this.setState({ guestSessionId: id })),
 
       this.moviesService.getGenreList().then(({ genres }) => {
-        this.genreList = genres.reduce((acc, { id, name }) => acc.set(id, name), new Map());
+        const genreList = genres.reduce((acc, { id, name }) => acc.set(id, name), new Map());
+
+        this.setState({ genreList });
       }),
     ])
-      .then(() => this.setState({ loading: false }))
       .catch((error) =>
         this.setState({
           error: true,
           errorMessage: error.message,
         })
-      );
+      )
+      .finally(() => this.setState({ loading: false }));
   }
 
   render() {
-    const { loading, guestSessionId, error, errorMessage } = this.state;
+    const { loading, guestSessionId, error, errorMessage, genreList } = this.state;
     const content = (
       <div className="main-wrapper">
-        <GenreListProvider value={this.genreList}>
+        <GenreListProvider value={genreList}>
           <MoviesServiceProvider value={this.moviesService}>
             <MoviePage guestSessionId={guestSessionId} />
           </MoviesServiceProvider>
