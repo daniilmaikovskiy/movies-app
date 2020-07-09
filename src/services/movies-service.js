@@ -13,28 +13,32 @@ export default class MoviesService {
     return url;
   };
 
+  prepareMoviesJson = ({ results, total_pages: totalPages }) => {
+    const movieBlocksData = results.map((el) => {
+      const img = el.poster_path == null ? '' : this.urlImageDB + el.poster_path;
+
+      const movieData = {
+        id: el.id,
+        title: el.title,
+        overview: el.overview,
+        date: el.release_date,
+        img,
+        vote: `${el.vote_average}`,
+        rating: el.rating,
+        genreIds: el.genre_ids,
+      };
+
+      return movieData;
+    });
+
+    return { movieBlocksData, totalPages };
+  };
+
   getMovies = async (query, page = 1) => {
     if ((typeof query === 'string' || query instanceof String) && query.length > 0) {
       return fetch(this.createSearchMoviesURL(query, page))
         .then((responce) => responce.json())
-        .then(({ results, total_pages: totalPages }) => {
-          const movieBlocksData = results.map((el) => {
-            const img = el.poster_path == null ? '' : this.urlImageDB + el.poster_path;
-
-            const movieData = {
-              id: el.id,
-              title: el.title,
-              overview: el.overview,
-              date: el.release_date,
-              img,
-              vote: `${el.vote_average}`,
-            };
-
-            return movieData;
-          });
-
-          return { movieBlocksData, totalPages };
-        });
+        .then((json) => this.prepareMoviesJson(json));
     }
     return { movieBlocksData: [], totalPages: 0 };
   };
@@ -57,5 +61,17 @@ export default class MoviesService {
         value: Number(vote),
       }),
     });
+  };
+
+  getRatedMovies = async (guestSessionId) => {
+    return fetch(`${this.url}/guest_session/${guestSessionId}/rated/movies?api_key=${this.apiKey}`)
+      .then((response) => response.json())
+      .then((json) => this.prepareMoviesJson(json));
+  };
+
+  getGenreList = async () => {
+    return fetch(`${this.url}/genre/movie/list?api_key=${this.apiKey}`).then((response) =>
+      response.json()
+    );
   };
 }

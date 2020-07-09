@@ -63,6 +63,7 @@ Movies.propTypes = {
       date: PropTypes.string.isRequired,
       img: PropTypes.string.isRequired,
       vote: PropTypes.string.isRequired,
+      rating: PropTypes.number,
     })
   ),
   loading: PropTypes.bool,

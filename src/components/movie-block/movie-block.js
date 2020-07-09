@@ -5,6 +5,7 @@ import { formatWithOptions } from 'date-fns/fp';
 import { enUS } from 'date-fns/locale';
 import { Tag, Rate, Empty } from 'antd';
 import { StarFilled } from '@ant-design/icons';
+import { GenreListConsumer } from '../genre-list-context';
 
 function formatDate(date) {
   try {
@@ -83,8 +84,29 @@ MoviePoster.propTypes = {
   img: PropTypes.string.isRequired,
 };
 
+function Genres({ genreList, genreIds }) {
+  const getTags = () => {
+    return genreIds.reduce((acc, id) => {
+      const genre = genreList.get(id);
+
+      if (genre) {
+        acc.push(<Tag key={id}>{genre}</Tag>);
+      }
+
+      return acc;
+    }, []);
+  };
+
+  return <div className="tags">{getTags()}</div>;
+}
+
+Genres.propTypes = {
+  genreList: PropTypes.objectOf(Map).isRequired,
+  genreIds: PropTypes.arrayOf(Number).isRequired,
+};
+
 export default function MovieBlock({ data, rateMovie }) {
-  const { img, title, date, overview, vote } = data;
+  const { img, title, date, overview, vote, rating, genreIds } = data;
 
   return (
     <div className="movie-block">
@@ -97,10 +119,9 @@ export default function MovieBlock({ data, rateMovie }) {
           <div className="main-info-wrapper">
             <div className="title">{title}</div>
             <div className="date">{formatDate(date)}</div>
-            <div className="tags">
-              <Tag>Action</Tag>
-              <Tag>Drama</Tag>
-            </div>
+            <GenreListConsumer>
+              {(genreList) => <Genres genreList={genreList} genreIds={genreIds} />}
+            </GenreListConsumer>
           </div>
           <Vote value={vote} />
         </div>
@@ -111,7 +132,7 @@ export default function MovieBlock({ data, rateMovie }) {
           <Rate
             allowHalf
             count={10}
-            defaultValue={0}
+            defaultValue={typeof rating === 'number' ? rating : 0}
             character={<StarFilled className="star-filled" />}
             onChange={rateMovie}
           />
@@ -129,5 +150,7 @@ MovieBlock.propTypes = {
     date: PropTypes.string.isRequired,
     img: PropTypes.string.isRequired,
     vote: PropTypes.string.isRequired,
+    genreIds: PropTypes.arrayOf(Number).isRequired,
+    rating: PropTypes.number,
   }).isRequired,
 };
