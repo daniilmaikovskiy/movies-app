@@ -34,7 +34,7 @@ export default class MoviePageSearch extends React.Component {
         .catch((error) => {
           this.setState({
             error: true,
-            errorMessage: error,
+            errorMessage: error.message,
           });
         });
     }

@@ -7,28 +7,44 @@ export default class MoviePageRated extends React.Component {
   state = {
     movieBlocksData: [],
     loading: true,
+    error: false,
+    errorMessage: '',
   };
 
   componentDidUpdate(prevProps) {
     const { getRatedMovies, className } = this.props;
 
     if (prevProps.className !== className) {
-      getRatedMovies().then(({ movieBlocksData }) =>
-        this.setState({
-          loading: false,
-          movieBlocksData,
-        })
-      );
+      getRatedMovies()
+        .then(({ movieBlocksData }) =>
+          this.setState({
+            loading: false,
+            error: false,
+            movieBlocksData,
+          })
+        )
+        .catch((error) =>
+          this.setState({
+            error: true,
+            errorMessage: error.message,
+          })
+        );
     }
   }
 
   render() {
     const { className, rateMovie } = this.props;
-    const { movieBlocksData, loading } = this.state;
+    const { movieBlocksData, loading, error, errorMessage } = this.state;
 
     return (
       <div className={`movie-page-rated ${className}`}>
-        <Movies movieBlocksData={movieBlocksData} loading={loading} rateMovie={rateMovie} />
+        <Movies
+          movieBlocksData={movieBlocksData}
+          loading={loading}
+          error={error}
+          errorMessage={errorMessage}
+          rateMovie={rateMovie}
+        />
       </div>
     );
   }
