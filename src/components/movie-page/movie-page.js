@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './movie-page.css';
 import { Menu } from 'antd';
-import MoviePageSearch from '../movie-page-search';
-import MoviePageRated from '../movie-page-rated';
-import { MoviesServiceConsumer } from '../movies-service-context';
+import MoviePageSelector from '../movie-page-selector';
 
 export default class MoviePage extends React.Component {
   state = {
@@ -15,17 +13,10 @@ export default class MoviePage extends React.Component {
     this.setState({ switchKeys: [evt.key] });
   };
 
-  getHideClassByName = (name) => {
-    const { switchKeys } = this.state;
-    const isVisible = switchKeys.some((el) => el === name);
-
-    return isVisible ? '' : 'hidden';
-  };
-
   render() {
     const { guestSessionId } = this.props;
     const { switchKeys } = this.state;
-    const { onClickMenu, getHideClassByName } = this;
+    const { onClickMenu } = this;
 
     return (
       <div className="movie-page">
@@ -35,24 +26,7 @@ export default class MoviePage extends React.Component {
             <Menu.Item key="rated">Rated</Menu.Item>
           </Menu>
         </div>
-        <MoviesServiceConsumer>
-          {({ getMovies, rateMovie, getRatedMovies }) => {
-            return (
-              <>
-                <MoviePageSearch
-                  className={getHideClassByName('search')}
-                  getMovies={getMovies}
-                  rateMovie={(id, vote) => rateMovie(guestSessionId, id, vote)}
-                />
-                <MoviePageRated
-                  className={getHideClassByName('rated')}
-                  rateMovie={(id, vote) => rateMovie(guestSessionId, id, vote)}
-                  getRatedMovies={() => getRatedMovies(guestSessionId)}
-                />
-              </>
-            );
-          }}
-        </MoviesServiceConsumer>
+        <MoviePageSelector guestSessionId={guestSessionId} switchKeys={switchKeys} />
       </div>
     );
   }
