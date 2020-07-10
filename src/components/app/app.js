@@ -44,7 +44,15 @@ export default class App extends React.Component {
 
     if (error) return <ErrorAlert message={errorMessage} />;
 
-    const content = (
+    if (loading) {
+      return (
+        <div className="loading-wrapper">
+          <Spin tip="loading..." />
+        </div>
+      );
+    }
+
+    return (
       <div className="main-wrapper">
         <GenreListProvider value={genreList}>
           <MoviesServiceContext.Provider value={this.moviesService}>
@@ -53,12 +61,5 @@ export default class App extends React.Component {
         </GenreListProvider>
       </div>
     );
-    const spin = (
-      <div className="loading-wrapper">
-        <Spin tip="loading..." />
-      </div>
-    );
-
-    return loading ? spin : content;
   }
 }
